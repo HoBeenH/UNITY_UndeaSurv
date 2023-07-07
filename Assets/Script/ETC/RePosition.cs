@@ -37,7 +37,7 @@ namespace Script.ETC
             switch (transform.tag)
             {
                 case ConstHelper.GROUND_TAG:
-                    switch (_diffX > _diffY)
+                    switch (_diffX >= _diffY)
                     {
                         case true:
                             transform.Translate(Vector3.right * _dirX * TILE_SIZE);

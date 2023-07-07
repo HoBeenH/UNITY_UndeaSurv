@@ -10,5 +10,7 @@ namespace Script.Table.Base
         public abstract void SetTableOnlyEditor(Dictionary<string, List<string>> data);
 
         public abstract void OnLoadTable();
+
+        public abstract void ClearTable();
     }
 }

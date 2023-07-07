@@ -8,21 +8,21 @@ using UnityEngine;
 namespace Script.Table
 {
     [System.Serializable]
-    public class EnemyDic : IntDic<EnemyTableModel>
+    public class WeaponDic : IntDic<WeaponTableModel>
     {
         
     }
 
     [System.Serializable]
-    public class EnemyTable : TableNode
+    public class WeaponTable : TableNode
     {
-        [SerializeField] private EnemyDic m_EnemyTableDic = new EnemyDic();
+        [SerializeField] private WeaponDic m_WeaponTableDic = new WeaponDic();
 
-        public int GetLen() => m_EnemyTableDic.Count;
+        public int GetLen() => m_WeaponTableDic.Count;
 
-        public EnemyTableModel GetData(int idx)
+        public WeaponTableModel GetData(int idx)
         {
-            if (m_EnemyTableDic.TryGetValue(idx, out var data))
+            if (m_WeaponTableDic.TryGetValue(idx, out var data))
             {
                 return data;
             }
@@ -40,16 +40,18 @@ namespace Script.Table
             var _idx = 0;
             while (_idx < _max)
             {
-                var _model = new EnemyTableModel();
+                var _model = new WeaponTableModel();
                 data["Index"][_idx].Parse(-1, out _model.ID);
-                data["SpawnTime"][_idx].Parse(-1, out _model.SpawnTime);
-                data["Health"][_idx].Parse(-1, out _model.Health);
+                data["Damage"][_idx].Parse(-1, out _model.Damage);
+                data["Count"][_idx].Parse(-1, out _model.Count);
+                data["EPoolType"][_idx].Parse(-1, out _model.EPoolType);
+                data["Timer"][_idx].Parse(-1, out _model.Timer);
                 data["Speed"][_idx].Parse(-1, out _model.Speed);
                 
-                if (m_EnemyTableDic.ContainsKey(_model.ID))
+                if (m_WeaponTableDic.ContainsKey(_model.ID))
                     D.E($"Contains Key {_model.ID}");
                 else
-                    m_EnemyTableDic.Add(_model.ID, _model);
+                    m_WeaponTableDic.Add(_model.ID, _model);
                 
                 _idx++;
             }
@@ -61,14 +63,14 @@ namespace Script.Table
 
         public override void ClearTable()
         {
-            m_EnemyTableDic.Clear();
+            m_WeaponTableDic.Clear();
         }
 
         public override string ToString()
         {
             var _sb = new StringBuilder();
-            foreach (var _model in m_EnemyTableDic.Values)
-                _sb.AppendLine($"{_model.ID} {_model.Health} {_model.SpawnTime} {_model.Speed}");
+            foreach (var _model in m_WeaponTableDic.Values)
+                _sb.AppendLine($"{_model.ID} {_model.Damage} {_model.Count} {_model.EPoolType} {_model.Timer} {_model.Speed} {_model.GetPoolType().ToString()}");
 
             return _sb.ToString();
         }

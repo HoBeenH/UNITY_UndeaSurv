@@ -4,7 +4,7 @@ using Object = UnityEngine.Object;
 
 namespace Script.Helper
 {
-    public class D
+    public static class D
     {
         private const string DEBUG_SYMBOL = "UNITY_LOG";
 

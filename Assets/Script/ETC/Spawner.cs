@@ -37,21 +37,12 @@ namespace Script.ETC
 
         private void Spawn()
         {
-            var _pool = GameManager.Instance.Pool;
-            if (_pool == null)
-                return;
-
-            var _enemy = _pool.Get(0);
+            var _enemy = PoolManager.Instance.GetObject<Enemy>(PoolManager.EPoolType.Enemy);
             if (_enemy == null)
                 return;
 
             _enemy.transform.position = m_SpawnTr[Random.Range(1, m_SpawnTr.Length)].position;
-            Enemy _enemyComp = null;
-            _enemy.GetComp(ref _enemyComp);
-            if (_enemyComp == null)
-                return;
-            
-            _enemyComp.Init(m_EnemyTable.GetData(m_Level));
+            _enemy.Init(m_EnemyTable.GetData(m_Level));
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Script.Helper;
 using Script.Table;
+using Script.Table.Base;
 using UnityEditor;
 using UnityEngine;
 
@@ -29,6 +30,8 @@ namespace Editor
             var _temp = Resources.Load<TableObject>("Table/TableData");
             D.Assert(_temp);
             D.L(_temp.GetTable<EnemyTable>().ToString());
+            D.L(_temp.GetTable<WeaponTable>().ToString());
+            D.L(_temp.GetTable<ConfigTable>().ToString());
         }
         
         private void Convert()
@@ -84,7 +87,8 @@ namespace Editor
                 File.Delete(_fullPath);
             
             AssetDatabase.CreateAsset(_tableBase, SAVE_PATH);
-            _tableBase.TableList.ForEach(x => AssetDatabase.AddObjectToAsset(x, _tableBase));
+            foreach (var _so in _tableBase.TableList)
+                AssetDatabase.AddObjectToAsset(_so, _tableBase);
             
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -130,22 +134,34 @@ namespace Editor
             var _strLineCnt = _strAllLine.Length;
 
             var _tableColumNameArr = _strAllLine[0].Split(',');
-            var _typeCnt = _tableColumNameArr.Length;
             
             var _table = new Dictionary<string, List<string>>();
-            foreach (var _cur in _tableColumNameArr)
+            var _ignoreIdx = new HashSet<int>();
+            for (var i = 0; i < _tableColumNameArr.Length; i++)
             {
+                var _cur = _tableColumNameArr[i];
+                if (_cur.Contains('_'))
+                {
+                    _ignoreIdx.Add(i);
+                }
+
                 _table.Add(_cur, new List<string>());
             }
             
+            var _typeCnt = _tableColumNameArr.Length - _ignoreIdx.Count;
+
             for (var i = 1; i < _strLineCnt; i++)
             {
                 var _split = _strAllLine[i].Replace("\r\n", string.Empty).Split(',');
                 if (_split == null || _split.Length == 0 || string.IsNullOrEmpty(_split[0]))
                     continue;
-                    
+
                 for (var j = 0; j < _typeCnt; j++)
+                {
+                    if (_ignoreIdx.Contains(j))
+                        continue;
                     _table[_tableColumNameArr[j]].Add(_split[j]);
+                }
             }
 
             return _table;

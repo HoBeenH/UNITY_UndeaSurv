@@ -8,6 +8,7 @@ namespace Script.Helper
         public const string AREA_TAG = "Area";
         public const string GROUND_TAG = "Ground";
         public const string ENEMY_TAG = "Enemy";
+        public const string BULLET_TAG = "Bullet";
         
         
     }

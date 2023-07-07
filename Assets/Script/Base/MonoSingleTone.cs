@@ -1,8 +1,11 @@
 using System;
+using Script.Manager;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Script.Base
 {
+    [DefaultExecutionOrder(-1)]
     public abstract class MonoSingleTone<T> : MonoBehaviour where T : MonoBehaviour
     {
         private static T m_Instance = null;
@@ -45,7 +48,8 @@ namespace Script.Base
         {
             if (m_IsInit)
                 return;
-            
+
+            m_IsInit = true;
             InitManager();
         }
 
